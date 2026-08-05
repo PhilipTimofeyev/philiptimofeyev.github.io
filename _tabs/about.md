@@ -3,6 +3,6 @@
 icon: fas fa-info-circle
 order: 4
 ---
+Hi I'm Philip
 
-> Add Markdown syntax content to file `_tabs/about.md`{: .filepath } and it will show up on this page.
-{: .prompt-tip }
+I'm a former film score composer turned software engineer. I started my journey with web development in 2020, and have since expanded into systems engineering and machine learning. I like to document my self-study here and deep dive into computer science and math topics I find particularly interesting.

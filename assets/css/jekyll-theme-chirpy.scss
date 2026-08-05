@@ -1,0 +1,22 @@
+---
+---
+
+@use 'abstracts/variables' with (
+  $theme: '{{ site.theme_mode }}'
+);
+
+/* prettier-ignore */
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+
+/* append your custom style below */
+
+
+#sidebar .site-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}

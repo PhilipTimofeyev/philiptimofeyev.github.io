@@ -16,7 +16,7 @@ math: true
 
 Linear regression is a fundamental tool and first step into supervised learning. Supervised learning is when a model is trained on labeled data sets containing inputs and corresponding outputs.
 
-#### Why Linear Regression Is Not Great for Classification
+#### Why Linear Regression Is *Not* Good for Classification
 
 Linear regression is good at predicting a *quantitative* result given inputs instead of a *qualitative* one. For example, predicting the cost of a chocolate bar based on weight would be a quantitive prediction, while predicting who a person's favorite composer is based on age, would be qualitative. 
 
@@ -181,11 +181,11 @@ $$
 $$
 
 
-These two formulas give use the solution to the bias and *one* predictor. But for the digit classifier, there are 784 predictors! It may seem that we can just apply the $\hat{\beta}_1$ for all values of $n$ to get the multiple predictors. But this does not work because of **omitted variable bias**. The current formula is saying "$\hat{\beta}_1$ represents the change in $Y$ per unit change in $x_1$", but ignores $x_2$, $x_3$ and so on. The correct approach is "the change in $Y$ per unit change in $x_1$ *while holding all other x's constant*". 
+These two formulas give us the solution to the bias and *one* predictor. But for the digit classifier, there are 784 predictors! It may seem that we can just apply the $\hat{\beta}_1$ for all values of $n$ to get the multiple predictors. But this does not work because of **omitted variable bias**. The current formula is saying "$\hat{\beta}_1$ represents the change in $Y$ per unit change in $x_1$", but ignores $x_2$, $x_3$ and so on. The correct approach is "the change in $Y$ per unit change in $x_1$ *while holding all other x's constant*". 
 
 Because predictors are generally related to each other, the $\hat{\beta}_1$ minimizer formula ignores the effect of other predictors and this creates the omitted variable bias. For this reason, a simple linear regression could have different results than a multilinear regression. 
 
-To account for the other predictors, we enlist linear algebra for the job.
+To account for the other predictors, we enlist linear algebra for the job!
 
 
 
