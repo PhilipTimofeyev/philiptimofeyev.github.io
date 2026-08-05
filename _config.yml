@@ -31,6 +31,12 @@ github:
 # twitter:
 #   username: twitter_username # change to your Twitter username
 
+# The Site Author
+author:
+  name: Philip Timofeyev
+  twitter:
+  url:
+
 social:
   name: Philip Timofeyev
   email: philiptimofeyev@gmail.com

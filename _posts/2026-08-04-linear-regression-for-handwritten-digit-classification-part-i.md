@@ -1,9 +1,10 @@
 ---
 title: Linear Regression for Handwritten Digit Classification - Part I
-author: philip
+layout: post
 date: 2026-08-04 19:16:00 +0800
+author: philip
 categories: [Blogging, Tutorial]
-tags: [machine learning, MNIST, classification, linear algebra, statistics, Rust]
+tags: [machine]
 render_with_liquid: false
 media_subpath: /assets/img/posts/linear_regression_part_i
 math: true
