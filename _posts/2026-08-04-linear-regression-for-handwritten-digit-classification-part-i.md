@@ -34,10 +34,9 @@ Y = \Set{
 }
 $$
 
-
 Here the differences between chocolate bar prices makes mathematical sense and are meaningful. Linear regression assumes that increments represent proportional increases, ie. as the weight of a chocolate bar doubles, the cost doubles. This does not quite work for qualitative data.
 
- ![Composer graph](composer_graph.png) &nbsp;&nbsp;&nbsp;                      	  ![Chocolate graph](chocolate_graph.png)&nbsp;&nbsp;    
+<div style="display: flex; flex-direction: row; gap: 20px; margin-bottom: 30px;">   <div style="flex: 1;">     <img src="chocolate_graph.png" alt="Chocolate graph" style="width: 100%;">   </div>    <div style="flex: 1;">     <img src="composer_graph.png" alt="Composer graph" style="width: 100%;">   </div> </div>
 
 
 
@@ -59,9 +58,7 @@ $$
 
 Every pixel from the dataset has a value ranging between `0-255` that measures the intensity.
 
-![MNIST Digits](mnist_digits.png) &nbsp;&nbsp;&nbsp;  
-
-<img src="/Users/philiptimofeyev/Documents/Personal Projects/rust_projects/digit_classifier/assets/images/mnist_digits.png" alt="flatten dimension" style="zoom:45%;" />
+<div style="display: flex; gap: 20px; justify-content: center;">   <img src="mnist_digits.png" alt="MNIST digit" width="300">  </div>
 
 
 
@@ -127,60 +124,68 @@ fn prepare_train_data(
 
 ### Solving Least Squares
 
-#### Single Linear Least Squares
-
 When solving the standard least squares problem with a single slope (predictor) and bias, the equation is:
 
-$$y_i \approx \hat{\beta}_0 + \hat{\beta}_1 x_i$$
+$$
+y_i\approx \hat{\beta}_0 +\hat{\beta}_1x_i
+$$
 
-To find the least squares solution, the goal is to minimize the *residual sum of squares*:
 
-$$\text{RSS} = e_1^2 + e_2^2 + \dots + e_n^2$$
+To find the least squares the solution, the goal is to minimize the *residual sum of squares*:
 
-or
+$$
+RSS=e^2_1+e^2_2+...+e^2_n
+\ \text{or }
 
-$$\text{RSS} = (y_1 - \hat{\beta}_0 - \hat{\beta}_1 x_1)^2 + (y_2 - \hat{\beta}_0 - \hat{\beta}_1 x_2)^2 + \dots + (y_n - \hat{\beta}_0 - \hat{\beta}_1 x_n)^2$$
+(y_1-\hat{\beta}_0-\hat{\beta}_1x_1)^2+(y_2-\hat{\beta}_0-\hat{\beta}_1x_2)^2+...+(y_n-\hat{\beta}_0-\hat{\beta}_1x_n)^2
+\\
+\\
+\text{The total sum of squared errors is represented as:}
+\\
+S=\sum_{i=1}^n(y_i-(\hat{\beta}_0+\hat{\beta}_1x_i))^2
+\\
+\small\text{$S$ is what needs to be minimized }
+$$
 
-The total sum of squared errors is represented as:
 
-$$S = \sum_{i=1}^n \left(y_i - (\hat{\beta}_0 + \hat{\beta}_1 x_i)\right)^2$$
+To minimize the function, we must find where the slope of $S=0$. Taking the partial derivatives with respect to $\beta_0$ and $\beta_1$, where $\beta_0$ represents the bias and $\beta_1$ represents the predictor:
 
-$S$ is what needs to be minimized.
+$$
+\frac{\partial S}{\partial {\beta}_0}=-2\sum_{i=1}^n(y_i-(\hat{\beta}_0+\hat{\beta}_1x_i))
+\\\\
+\frac{\partial S}{\partial {\beta}_1}=-2\sum_{i=1}^nx_i(y_i-(\hat{\beta}_0+\hat{\beta}_1x_i))
+\\\\
+\text{Setting the first equation to 0 to find the minimum and solving:}
+\\\\
+\sum_{i=1}^ny_i-\hat{\beta}_1\sum_{i=1}^nx_i=n\hat{\beta}_0
+\\\\
+\text{When we divide by $n$, this gives us the samples means:}
+\\\\
+\frac{1}{n}{\sum_{i=1}^ny_i}=\bar{y} \qquad  \hat{\beta}_1(\frac{1}{n}{\sum_{i=1}^nx_i})=\hat{\beta}_1\bar{x}
+\\\\\text{Substituting back into the first equation:}
+\\\\
+\hat{\beta}_0=\bar{y}-\hat{\beta}_1\bar{x}
+\\\\\text{Now setting the second equation to 0 and solving:}
+\\\\
+\sum{x_iy_i}-\hat{\beta}_1\sum{x_i^2}-\hat{\beta}_0\sum{x_i}=0
+\\\\
+\text{If we substitute what we previously found for $\hat{\beta}_0$}:
+\\\\
+\sum{y_i}-\bar{y}\sum{x_i}=\hat{\beta}_1(\sum{x_i^2}-\bar{x}\sum{x_i})
+\\\\
+\
+\text{Finally solving for $\hat{\beta}_1$:}
+\\\\
+\hat{\beta}_1=\frac{\sum_{i=1}^n(x_i-\bar{x})(y_i-\bar{y})}{\sum_{i=1}^n(x_i-\bar{x})^2}=\frac{\text{Cov}(x,y)}{\text{Var}(x)}=\frac{S_{xy}}{S_{xx}}
+$$
 
-To minimize the function, we must find where the slope of $S = 0$. Taking the partial derivatives with respect to $\beta_0$ and $\beta_1$, where $\beta_0$ represents the bias and $\beta_1$ represents the predictor:
 
-$$\frac{\partial S}{\partial \beta_0} = -2\sum_{i=1}^n \left(y_i - (\hat{\beta}_0 + \hat{\beta}_1 x_i)\right)$$
+These two formulas give use the solution to the bias and *one* predictor. But for the digit classifier, there are 784 predictors! It may seem that we can just apply the $\hat{\beta}_1$ for all values of $n$ to get the multiple predictors. But this does not work because of **omitted variable bias**. The current formula is saying "$\hat{\beta}_1$ represents the change in $Y$ per unit change in $x_1$", but ignores $x_2$, $x_3$ and so on. The correct approach is "the change in $Y$ per unit change in $x_1$ *while holding all other x's constant*". 
 
-$$\frac{\partial S}{\partial \beta_1} = -2\sum_{i=1}^n x_i \left(y_i - (\hat{\beta}_0 + \hat{\beta}_1 x_i)\right)$$
-
-Setting the first equation to $0$ to find the minimum and solving:
-
-$$\sum_{i=1}^n y_i - \hat{\beta}_1 \sum_{i=1}^n x_i = n\hat{\beta}_0$$
-
-When we divide by $n$, this gives us the sample means:
-
-$$\frac{1}{n}{\sum_{i=1}^n y_i} = \bar{y} \qquad \hat{\beta}_1\left(\frac{1}{n}{\sum_{i=1}^n x_i}\right) = \hat{\beta}_1\bar{x}$$
-
-Substituting back into the first equation:
-
-$$\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$$
-
-Now setting the second equation to $0$ and solving:
-
-$$\sum x_i y_i - \hat{\beta}_1 \sum x_i^2 - \hat{\beta}_0 \sum x_i = 0$$
-
-If we substitute what we previously found for $\hat{\beta}_0$:
-
-$$\sum x_i y_i - \bar{y}\sum x_i = \hat{\beta}_1 \left(\sum x_i^2 - \bar{x}\sum x_i\right)$$
-
-Finally solving for $\hat{\beta}_1$:
-
-$$\hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2} = \frac{\text{Cov}(x,y)}{\text{Var}(x)} = \frac{S_{xy}}{S_{xx}}$$
-
-These two formulas give us the solution to the bias and *one* predictor. But for the digit classifier, there are 784 predictors! It may seem that we can just apply the $\hat{\beta}_1$ for all values of $n$ to get the multiple predictors. But this does not work because of **omitted variable bias**. The current formula is saying "$\hat{\beta}_1$ represents the change in $Y$ per unit change in $x_1$", but ignores $x_2$, $x_3$ and so on. The correct approach is "the change in $Y$ per unit change in $x_1$ *while holding all other x's constant*".
-
-Because predictors are generally related to each other, the $\hat{\beta}_1$ minimizer formula ignores the effect of other predictors and this creates the omitted variable bias. For this reason, a simple linear regression could have different results than a multilinear regression.
+Because predictors are generally related to each other, the $\hat{\beta}_1$ minimizer formula ignores the effect of other predictors and this creates the omitted variable bias. For this reason, a simple linear regression could have different results than a multilinear regression. 
 
 To account for the other predictors, we enlist linear algebra for the job.
 
-<div align="center">   <h3><a href="https://example.com">Part II</a></h3> </div>
+
+
+<div align="center">   <h3><a href="">Part II</a></h3> </div>
