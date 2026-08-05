@@ -1,0 +1,10 @@
+---
+---
+@import 'main';
+
+/* Fix MathJax / KaTeX clipping */
+mjx-container[display="true"],
+.katex-display {
+  overflow-y: visible !important;
+  padding: 0.4em 0 !important;
+}
