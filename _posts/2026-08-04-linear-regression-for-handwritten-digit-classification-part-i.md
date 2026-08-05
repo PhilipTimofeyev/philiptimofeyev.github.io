@@ -188,4 +188,4 @@ To account for the other predictors, we enlist linear algebra for the job.
 
 
 
-<div align="center">   <h3><a href="">Part II</a></h3> </div>
+<div align="center">   <h3>Part II (coming soon)</h3> </div>
