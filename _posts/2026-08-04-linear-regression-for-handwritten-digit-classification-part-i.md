@@ -190,3 +190,11 @@ To account for the other predictors, we enlist linear algebra for the job!
 
 
 <div align="center">   <h3>Part II (coming soon)</h3> </div>
+
+
+
+## References
+
+James, G., Witten, D., Hastie, T., Tibshirani, R., & Taylor, J. (2023). *An Introduction to Statistical Learning*. Springer.
+
+Strang, G. (2023). *Introduction to Linear Algebra*. Wellesley-Cambridge Press.
