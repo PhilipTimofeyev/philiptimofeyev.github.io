@@ -35,6 +35,8 @@ Y = \Set{
 \\
 $$
 
+</div>
+
 The issue here is that the encodings, $\Set{1, 2 ,3}$, do not represent any mathematical meaning between the composers. Bach isn't half of Mendelssohn and Saint-Saëns isn't three times Bach (but Bach *is* number 1). If we compare this to an example of chocolate bars:
 
 $$
