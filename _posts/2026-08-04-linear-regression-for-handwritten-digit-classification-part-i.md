@@ -21,6 +21,9 @@ Linear regression is a fundamental tool and first step into supervised learning.
 Linear regression is good at predicting a *quantitative* result given inputs instead of a *qualitative* one. For example, predicting the cost of a chocolate bar based on weight would be a quantitive prediction, while predicting who a person's favorite composer is based on age, would be qualitative. 
 
 Encoding the composers into a numerical output variable, $Y$, could look something like this:
+
+<div align="center">
+
 $$
 Y = \Set{ 
     \begin{aligned} 
@@ -29,9 +32,10 @@ Y = \Set{
         &3 \quad\text{Saint-Saëns}
     \end{aligned} 
 }
+\\
 $$
-The issue here is that the encodings, $\Set{1, 2 ,3}$, do not represent any mathematical meaning between the composers. Bach isn't half of Mendelssohn and Saint-Saëns isn't three times Bach (but Bach *is* number 1). If we compare this to an example of chocolate bars:
 
+The issue here is that the encodings, $\Set{1, 2 ,3}$, do not represent any mathematical meaning between the composers. Bach isn't half of Mendelssohn and Saint-Saëns isn't three times Bach (but Bach *is* number 1). If we compare this to an example of chocolate bars:
 
 $$
 Y = \Set{ 
