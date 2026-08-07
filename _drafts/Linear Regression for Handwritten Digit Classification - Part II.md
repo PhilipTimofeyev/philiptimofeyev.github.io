@@ -146,3 +146,51 @@ The rank of our digit matrix will be *rank deficient*, meaning the number of non
 
 #### QR Decomposition
 
+
+
+
+
+
+
+
+
+
+
+
+
+# TALK ABOUT WHAT WEIGHTS MEAN IN LR
+
+That is a incredibly intuitive way to think about it, but statistically, no—that is not quite right.
+
+In linear regression, a weight ($\beta$) does not represent a probability itself. Instead, it represents a **slope** or a **rate of change**.
+
+Because your specific outcome variable is a probability (0 or 1), each weight represents **how much the overall probability of the digit changes when that specific pixel gets one unit darker**, assuming every single other pixel in the image remains exactly the same.
+
+Here is a breakdown of why they aren't probabilities, and how to correctly interpret them:
+
+### 1. Weights Can Be Negative
+
+A true probability can only exist between 0 and 1 (0% to 100%). You cannot have a -20% chance of something happening.
+
+However, linear regression weights can absolutely be negative.
+
+- Let's say you are training a model to find the digit '1', and the pixel in the far top-left corner gets a weight of **-0.20**.
+- This doesn't mean there is a -20% chance the pixel is a '1'.
+- It means that if someone draws dark ink in that specific top-left pixel, the model's overall prediction that the image is a '1' **drops by 20 percentage points**. The negative weight acts as a penalty.
+
+### 2. Weights Are "Marginal Effects"
+
+Think of the weights as point values or "votes" rather than probabilities.
+
+Let's say the pixel in the dead center of the image has a weight of **0.15**.
+
+- If that pixel is perfectly white (a value of 0), it contributes $0 \times 0.15 = 0$ to the final score.
+- If that pixel is perfectly black (a value of 1), it contributes $1 \times 0.15 = 0.15$ to the final score.
+- By turning black, that single pixel just boosted the model's confidence that the entire image is a '1' by exactly **15 percentage points**.
+
+### The Summary
+
+The weights are not telling you the probability *of the pixel*. They are telling you **how much power that pixel has to change the probability of the whole image**.
+
+Pixels with weights near **0** are ignored by the model because changing them doesn't affect the final probability. Pixels with large positive or negative weights are highly influential "hotspots" that aggressively drive the final probability up or down.
+

@@ -49,7 +49,7 @@ If we use the best-fit line for the cost of a chocolate bar, a 12 oz bar should 
 
 #### Applying To Digit Classification
 
-The data used is the MNIST digit dataset which is composed of 70,000 images, 60,000 for training and 10,000 for validation. Each image is a 28x28 pixel handwritten digit, 0 through 9.
+The data used is the MNIST digit dataset which is composed of 70,000 images: 60,000 for training and 10,000 for validation. Each image is a 28x28 pixel handwritten digit, 0 through 9.
 
 What our instinct may tell us to initially do is to set up the basic $Y=\beta_0 + \beta_1 X$ equation. If we flatten the 28x28 image into a 1x784 row of pixels, each pixel can be considered a predictor in the equation. The equation would look like this:
 
@@ -83,23 +83,23 @@ Y = \Set{
 $$
 
 
-But we run into a problem similar to our composers issue. Let's say we start training and our first image is the digit 0. We apply it to the equation and we get 784 data points that all represent "0". Then let's say the next digit is 1. Now we're trying to create a best-fit line that goes through 0 and 1, much like the composers Bach and Saent-Saëns. But even though the encodings are numbers, as are the drawn digits, they have no mathematical relation to each other. If instead of handwritten digits we used hand-written animals, a dog would have no mathematical relation to a walrus.
+But we run into a problem similar to our composers issue. Let's say we start training and our first image is the digit 0. We apply it to the equation and we get 784 data points that all represent "0". Then let's say the next digit is 1. Now we're trying to create a best-fit line that goes through 0 and 1, much like the composers Bach and Saent-Saëns. But even though the encodings are numbers, as are the drawn digits, they have no mathematical relation to each other. If instead of handwritten digits we used hand-drawn animals, a kookaburra would have no mathematical relation to a dolphin.
 
 So using linear regression for classification when there are three or more classes doesn't work. But what about two classes?
 
 #### Classification with a Binary Qualification Response
 
-If we only allow two qualitative response variables, we can encode them into a binary format which can be interpreted as either 0 or 1. In our digit classification case, we could train each digit to either be the digit trained, or not. For example, we can train the digit 0 by creating a large matrix of the 60,000 digits with each row being a digit, each column representing the pixel along with its predictor, and the $Y$ value being either $0$ for when the digit is not $0$, or $1$ when the digit is $0$. Once this matrix equation is solved, we end up with the weights for the pixels for that digit. We can save the weights and repeat the process for all of the digits.
+If we only allow two qualitative response variables, we can encode them into a binary format which can be interpreted as either 0 or 1. Using a binary dependent variable in linear regression is also called the **Linear Probability Model**. For our digit classification case, we could train each digit to either be the digit trained, represented by a 1, or not the target digit, represented by a 0. 
 
 ##### Preparing the Data
 
 To prepare our MNIST data set for training, we need to do a few things: 
 
 1. Flatten the 28x28 pixel matrix to a single row of 784 elements, 
-2. Convert each pixel into either being on or off using binary values of `0` or `1`.
+2. Convert each pixel into either being the target digit or not, using binary values of `1` or `0`.
 3. Convert the label set to binary.
 
-Here is what the Rust implementation may look like:
+Here is what the Rust implementation may look like (using nalgebra):
 
 ```rust
 fn prepare_train_data(
@@ -118,10 +118,19 @@ fn prepare_train_data(
 
     Ok((train_data, train_label))
 }
-
 ```
 
 
+
+##### Best Fit Line in Different Dimensions
+
+To conceptualize how the amount of independent and dependent variables affect the dimensionality the problem, we can start with a single predictor. This is the standard $y\approx \beta_0 +\beta_1x$ equation where we are regressing $y$ onto $x$.  The resulting data would exist in 2D space, an $x$ value for the pixel, and a $y$ value for the result of $1$ or $0$. The best-fit would be just a straight line. 
+
+If we have two predictors, the data would then exist in 3D space, an $x_1$ value for the first pixel, and $x_2$ value for the second pixel, and the same $0$ or $1$ $y$ value for the binary result. Here the best-fit would be a 2D flat plane tilted through 3D space as close to the points as possible.  
+
+For our digit classifier, since there are 784 pixels, plus the bias, we would be trying to fit a 785 dimensional hyperplane through the 786 (predictors + bias + $y$ outcome) dimensional space, still trying to minimize the squared error. Even though high-dimensionality sounds complicated, the goal is still the same as it is with 2D space-- finding a best-fit line through a bunch of points. The fundamental concepts are the same!
+
+Now that we've set up the data, how do we actually solve the problem and find the best fit line?
 
 ### Solving Least Squares
 
@@ -181,7 +190,7 @@ $$
 $$
 
 
-These two formulas give us the solution to the bias and *one* predictor. But for the digit classifier, there are 784 predictors! It may seem that we can just apply the $\hat{\beta}_1$ for all values of $n$ to get the multiple predictors. But this does not work because of **omitted variable bias**. The current formula is saying "$\hat{\beta}_1$ represents the change in $Y$ per unit change in $x_1$", but ignores $x_2$, $x_3$ and so on. The correct approach is "the change in $Y$ per unit change in $x_1$ *while holding all other x's constant*". 
+These two formulas give us the solution to the bias and *one* predictor. But for the digit classifier, there are 784 predictors! It may seem that we can just apply the $\hat{\beta}_1$ formula for all values of $n$ to get the weights, but this does not work because of **omitted variable bias**. The current formula is saying "$\hat{\beta}_1$ represents the change in $Y$ per unit change in $x_1$", but ignores $x_2$, $x_3$ and so on. The correct approach is "the change in $Y$ per unit change in $x_1$ *while holding all other x's constant*". 
 
 Because predictors are generally related to each other, the $\hat{\beta}_1$ minimizer formula ignores the effect of other predictors and this creates the omitted variable bias. For this reason, a simple linear regression could have different results than a multilinear regression. 
 
