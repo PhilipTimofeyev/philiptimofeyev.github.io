@@ -21,8 +21,16 @@ Linear regression is a fundamental tool and first step into supervised learning.
 Linear regression is good at predicting a *quantitative* result given inputs instead of a *qualitative* one. For example, predicting the cost of a chocolate bar based on weight would be a quantitive prediction, while predicting who a person's favorite composer is based on age, would be qualitative. 
 
 Encoding the composers into a numerical output variable, $Y$, could look something like this:
-
-The issue here is that the encodings, $\Set{1, 2 ,3}$, do not represent any mathematical meaning between the composers. Bach isn't half of Mendelssohn and Saint-Saëns isn't three times Bach. If we compare this to an example of chocolate bars:
+$$
+Y = \Set{ 
+    \begin{aligned} 
+        &1 \quad\text{Bach}\\ 
+        &2 \quad\text{Mendelssohn}\\ 
+        &3 \quad\text{Saint-Saëns}
+    \end{aligned} 
+}
+$$
+The issue here is that the encodings, $\Set{1, 2 ,3}$, do not represent any mathematical meaning between the composers. Bach isn't half of Mendelssohn and Saint-Saëns isn't three times Bach (but Bach *is* number 1). If we compare this to an example of chocolate bars:
 
 
 $$
@@ -124,7 +132,7 @@ fn prepare_train_data(
 
 ##### Best Fit Line in Different Dimensions
 
-To conceptualize how the amount of independent and dependent variables affect the dimensionality the problem, we can start with a single predictor. This is the standard $y\approx \beta_0 +\beta_1x$ equation where we are regressing $y$ onto $x$.  The resulting data would exist in 2D space, an $x$ value for the pixel, and a $y$ value for the result of $1$ or $0$. The best-fit would be just a straight line. 
+To conceptualize how the amount of independent and dependent variables affect the dimensionality of the problem, we can start with a single predictor. This is the standard $y\approx \beta_0 +\beta_1x$ equation where we are regressing $y$ onto $x$.  The resulting data would exist in 2D space, an $x$ value for the pixel, and a $y$ value for the result of $1$ or $0$. The best-fit would be just a straight line. 
 
 If we have two predictors, the data would then exist in 3D space, an $x_1$ value for the first pixel, and $x_2$ value for the second pixel, and the same $0$ or $1$ $y$ value for the binary result. Here the best-fit would be a 2D flat plane tilted through 3D space as close to the points as possible.  
 
@@ -169,7 +177,7 @@ $$
 \\\\
 \sum_{i=1}^ny_i-\hat{\beta}_1\sum_{i=1}^nx_i=n\hat{\beta}_0
 \\\\
-\text{When we divide by $n$, this gives us the samples means:}
+\text{When we divide by $n$, this gives us the sample mean:}
 \\\\
 \frac{1}{n}{\sum_{i=1}^ny_i}=\bar{y} \qquad  \hat{\beta}_1(\frac{1}{n}{\sum_{i=1}^nx_i})=\hat{\beta}_1\bar{x}
 \\\\\text{Substituting back into the first equation:}
@@ -192,7 +200,7 @@ $$
 
 These two formulas give us the solution to the bias and *one* predictor. But for the digit classifier, there are 784 predictors! It may seem that we can just apply the $\hat{\beta}_1$ formula for all values of $n$ to get the weights, but this does not work because of **omitted variable bias**. The current formula is saying "$\hat{\beta}_1$ represents the change in $Y$ per unit change in $x_1$", but ignores $x_2$, $x_3$ and so on. The correct approach is "the change in $Y$ per unit change in $x_1$ *while holding all other x's constant*". 
 
-Because predictors are generally related to each other, the $\hat{\beta}_1$ minimizer formula ignores the effect of other predictors and this creates the omitted variable bias. For this reason, a simple linear regression could have different results than a multilinear regression. 
+Because predictors are generally related to each other, the $\hat{\beta}_1$ minimizer formula ignores the effect of other predictors and this creates the omitted variable bias. For this reason, simple linear regression could have different results than multilinear regression. 
 
 To account for the other predictors, we enlist linear algebra for the job!
 
